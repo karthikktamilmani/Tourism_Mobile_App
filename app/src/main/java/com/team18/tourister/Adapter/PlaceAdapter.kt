@@ -1,7 +1,6 @@
 package com.team18.tourister.Adapter
 
 import android.content.Context
-import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -14,12 +13,13 @@ import com.bumptech.glide.Glide
 import com.team18.tourister.API.PLACE_NAME
 import com.team18.tourister.API.PLACE_TYPE
 import com.team18.tourister.R
-import com.team18.tourister.models.SearchPlace
+import com.team18.tourister.models.CityPlace
+import com.team18.tourister.models.SearchListModel
 import kotlinx.android.synthetic.main.item.view.*
 
 class PlaceAdapter (private val context: Context) : RecyclerView.Adapter<PlaceAdapter.ViewHolder>() {
 
-    private var placeList  = mutableListOf<SearchPlace>()
+    private var placeList  = mutableListOf<SearchListModel>()
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
         return ViewHolder(
@@ -30,12 +30,12 @@ class PlaceAdapter (private val context: Context) : RecyclerView.Adapter<PlaceAd
 
     override fun getItemCount() = placeList.size
 
-    fun setupList(list: List<SearchPlace>) {
-        placeList = list as MutableList<SearchPlace>
+    fun setupList(list: List<SearchListModel>) {
+        placeList = list as MutableList<SearchListModel>
     }
 
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
-        Glide.with(context).load(placeList[position].image).into(holder.placeImage)
+        Glide.with(context).load(placeList[position].image_url).into(holder.placeImage)
         holder.placeName.text = placeList[position].name
         holder.placeName.setOnClickListener {
             it.findNavController().navigate(R.id.action_searchFragment_to_detailFragmet,

@@ -1,12 +1,14 @@
 package com.team18.tourister.registerFragment
 
 import android.app.Application
+import android.util.Base64
 import android.widget.Toast
 import androidx.databinding.Bindable
 import androidx.databinding.library.baseAdapters.BR
 import androidx.lifecycle.MutableLiveData
 import com.team18.tourister.API.PlaceApi
 import com.team18.tourister.ObservableViewModel
+import org.json.JSONObject
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
@@ -44,9 +46,9 @@ class RegisterViewModel (application: Application) : ObservableViewModel(applica
         if (userNameField.isNotEmpty() && passwordField.isNotEmpty()) {
 
             val params = HashMap<String, String>()
-            params["name"] = userNameField
-            params["email"] = emailField
-            params["password"] = passwordField
+            params["name"] = encode(userNameField)
+            params["email"] = encode(emailField)
+            params["password"] = encode(passwordField)
             email = userNameField
             makeRequest(params)
         } else {
@@ -62,10 +64,14 @@ class RegisterViewModel (application: Application) : ObservableViewModel(applica
             }
 
             override fun onResponse(call: Call<Any>, response: Response<Any>) {
-                moveForward.value = response.message().equals("OK")
+                val m = JSONObject(response.body().toString())
+                moveForward.value = m.getString("message") == "ok"
             }
         })
     }
 
 
+    fun encode(st: String) : String {
+        return Base64.encodeToString(st.toByteArray(), Base64.NO_WRAP)
+    }
 }

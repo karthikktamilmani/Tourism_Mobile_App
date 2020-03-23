@@ -9,12 +9,13 @@ import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.team18.tourister.R
-import com.team18.tourister.models.SearchPlace
+import com.team18.tourister.models.CityPlace
+import com.team18.tourister.models.SpotPlace
 import kotlinx.android.synthetic.main.spot_item.view.*
 
 class SpotAdapter(private var context: Context) : RecyclerView.Adapter<SpotAdapter.ViewHolder> () {
 
-    private var spotList = mutableListOf<SearchPlace>()
+    private var spotList = mutableListOf<SpotPlace>()
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): SpotAdapter.ViewHolder {
         return SpotAdapter.ViewHolder(
@@ -25,13 +26,13 @@ class SpotAdapter(private var context: Context) : RecyclerView.Adapter<SpotAdapt
 
     override fun getItemCount()= spotList.size
 
-    fun setUpList(list: List<SearchPlace>) {
-        spotList = list as MutableList<SearchPlace>
+    fun setUpList(list: List<SpotPlace>) {
+        spotList = list as MutableList<SpotPlace>
     }
 
     override fun onBindViewHolder(holder: SpotAdapter.ViewHolder, position: Int) {
-        Glide.with(context).load(spotList[position].image).into(holder.spotImage)
-        holder.spotName.text = spotList[position].name
+        Glide.with(context).load(spotList[position].T_Image).into(holder.spotImage)
+        holder.spotName.text = spotList[position].T_name
     }
 
     class ViewHolder (itemView: View) : RecyclerView.ViewHolder(itemView) {

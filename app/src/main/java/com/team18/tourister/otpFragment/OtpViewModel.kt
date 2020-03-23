@@ -3,6 +3,7 @@ package com.team18.tourister.otpFragment
 import android.app.Application
 import android.content.Context
 import android.content.SharedPreferences
+import android.util.Base64
 import android.widget.Toast
 import androidx.databinding.Bindable
 import androidx.databinding.library.baseAdapters.BR
@@ -13,6 +14,7 @@ import com.team18.tourister.API.SHAREDPREF_NAME
 import com.team18.tourister.API.TOKEN
 import com.team18.tourister.ObservableViewModel
 import com.team18.tourister.models.AuthenticationModel
+import org.json.JSONObject
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
@@ -44,8 +46,8 @@ class OtpViewModel (application: Application) : ObservableViewModel(application)
         if (otpField.isNotEmpty() && !email.isEmpty()) {
 
             val params = HashMap<String, String>()
-            params["otp"] = otpField
-            params["email"] = email
+            params["OTP"] = encode(otpField)
+            params["email"] = encode(email)
             makeRequest(params)
         } else {
             Toast.makeText(context, "Fields cannot be empty", Toast.LENGTH_LONG).show()
@@ -55,18 +57,28 @@ class OtpViewModel (application: Application) : ObservableViewModel(application)
     fun makeRequest(obj: HashMap<String, String>) {
         PlaceApi.retrofitService.verify(obj).enqueue(object : Callback<AuthenticationModel> {
             override fun onFailure(call: Call<AuthenticationModel>, t: Throwable) {
-                Toast.makeText(context,"Invalid Credentials",Toast.LENGTH_LONG).show()
+                Toast.makeText(context, "Invalid Credentials", Toast.LENGTH_LONG).show()
             }
 
-            override fun onResponse(call: Call<AuthenticationModel>, response: Response<AuthenticationModel>) {
-                if (response.message() == "OK") {
-                    sharedPreferences.edit().putString(TOKEN, response.body()?.token).apply()
+            override fun onResponse(
+                call: Call<AuthenticationModel>,
+                response: Response<AuthenticationModel>
+            ) {
+
+                val m = response.body()
+                if (m?.message == "ok") {
+                    sharedPreferences.edit().putString(TOKEN, m.token).apply()
                     sharedPreferences.edit().putString(EMAIL_EXTRA, email).apply()
                     moveForward.value = true
-                }else
+                } else
                     moveForward.value = false
             }
         })
     }
+
+    fun encode(st: String) : String {
+        return Base64.encodeToString(st.toByteArray(), Base64.NO_WRAP)
+    }
+
 
 }

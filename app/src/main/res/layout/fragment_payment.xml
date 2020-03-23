@@ -11,6 +11,14 @@
             type="com.team18.tourister.paymentFragment.PaymentViewModel" />
     </data>
 
+    <androidx.core.widget.NestedScrollView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:fillViewport="true"
+        >
+
+
+
 <androidx.constraintlayout.widget.ConstraintLayout
     android:layout_width="match_parent"
     android:layout_height="match_parent"
@@ -18,18 +26,61 @@
     >
 
     <TextView
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="Payment"
-        android:textStyle="bold"
         android:id="@+id/title"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_margin="10dp"
+        android:text="@string/payment"
         android:textColor="@color/colorBack"
         android:textSize="25sp"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
+        android:textStyle="bold"
         app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <TextView
+        android:id="@+id/total"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
         android:layout_margin="10dp"
-        />
+        android:textColor="@color/colorBack"
+        android:textSize="25sp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="1.0"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <TextView
+        android:id="@+id/fromHeading"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="32dp"
+        android:layout_marginTop="30dp"
+        android:layout_marginEnd="32dp"
+
+
+        android:text="Select From Address"
+        android:textSize="18sp"
+        android:textStyle="bold"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/title" />
+
+
+    <androidx.appcompat.widget.AppCompatSpinner
+        android:id="@+id/fromPayEditText"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="32dp"
+        android:layout_marginTop="8dp"
+        android:layout_marginEnd="32dp"
+        android:entries="@array/list_from"
+        android:selectedItemPosition="@={paymentVm.fromField}"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/fromHeading" />
 
     <com.google.android.material.textfield.TextInputLayout
         android:id="@+id/namePayEditText"
@@ -37,13 +88,13 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginStart="32dp"
-        android:layout_marginTop="10dp"
+        android:layout_marginTop="30dp"
         android:layout_marginEnd="32dp"
         android:layout_marginBottom="32dp"
         android:hint="@string/name"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/title">
+        app:layout_constraintTop_toBottomOf="@id/fromPayEditText">
 
         <com.google.android.material.textfield.TextInputEditText
             android:layout_width="match_parent"
@@ -188,6 +239,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
                     android:singleLine="true"
+                    android:id="@+id/monthInput"
                     android:inputType="number"
                     android:text="@={paymentVm.monthField}" />
             </com.google.android.material.textfield.TextInputLayout>
@@ -214,6 +266,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
                     android:singleLine="true"
+                    android:id="@+id/yearInput"
                     android:inputType="number"
                     android:text="@={paymentVm.yearField}" />
             </com.google.android.material.textfield.TextInputLayout>
@@ -246,6 +299,8 @@
     <com.google.android.material.floatingactionbutton.FloatingActionButton
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:id="@+id/payBtn"
+        android:onClick="@{() -> paymentVm.makePayment()}"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintBottom_toBottomOf="parent"
         android:layout_margin="20dp"
@@ -255,4 +310,6 @@
 
 
 </androidx.constraintlayout.widget.ConstraintLayout>
+    </androidx.core.widget.NestedScrollView>
+
 </layout>

@@ -2,6 +2,7 @@ package com.team18.tourister.API
 
 import com.team18.tourister.models.*
 import okhttp3.OkHttpClient
+import org.json.JSONObject
 import retrofit2.Call
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
@@ -25,18 +26,22 @@ private val retrofit = Retrofit.Builder()
 interface ApiService{
     @GET("$SEARCH/{input}")
     fun searchPlaces(@Path("input") input: String):
-            Call<List<SearchPlace>>
+            Call<SearchModel>
 
-    @GET("/{input}")
+    @GET("$SEARCH/{input}")
     fun getDetails(@Path("input") input: String):
             Call<Place>
 
+    @GET("/{input}")
+    fun getSpotDetails(@Path("input") input: String):
+            Call<SpotDetails>
+
     @GET(USER)
-    fun checkAuth(@Header("Authorization") auth: String):
+    fun checkAuth(@Header("Token") auth: String):
             Call<Any>
 
     @GET("$USER/login")
-    fun login(@Body body: HashMap<String, String>):
+    fun login(@Query("email") email: String,@Query("password") pass: String):
             Call<Any>
 
 
@@ -49,12 +54,12 @@ interface ApiService{
             Call<AuthenticationModel>
 
     @POST(TICKET)
-    fun bookTicket(@Body body: TicketModel):
+    fun bookTicket(@Header("Content-Type") type: String,@Body body: HashMap<String,Any>):
             Call<Any>
 
     @GET("$CARD/{input}")
     fun getCard(@Path("input") input: String):
-            Call<CardModel>
+            Call<List<CardModel>>
 }
 
 object PlaceApi {

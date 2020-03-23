@@ -7,10 +7,13 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
+import androidx.core.os.bundleOf
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
+import androidx.navigation.fragment.findNavController
 import com.team18.tourister.API.EMAIL_EXTRA
+import com.team18.tourister.API.TO_ADDRESS
 
 import com.team18.tourister.R
 import com.team18.tourister.databinding.FragmentOtpBinding
@@ -33,7 +36,8 @@ class OtpFragment : Fragment() {
 
             view.moveForward.observe(viewLifecycleOwner, Observer {
                 if(it) {
-
+                    findNavController().navigate(R.id.action_otpFragment_to_paymentFragment,
+                        bundleOf(TO_ADDRESS to arguments?.getString(TO_ADDRESS, "Point pleasant park")), null,null)
                 }else {
                     Toast.makeText(context,"Invalid OTP",Toast.LENGTH_LONG).show()
                 }

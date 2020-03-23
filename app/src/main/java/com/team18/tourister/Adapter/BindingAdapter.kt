@@ -7,3 +7,6 @@ import androidx.recyclerview.widget.RecyclerView
 fun bindRecyclerViewAdapter(recyclerView: RecyclerView, adapter: RecyclerView.Adapter<*>) {
     recyclerView.adapter = adapter
 }
+
+
+

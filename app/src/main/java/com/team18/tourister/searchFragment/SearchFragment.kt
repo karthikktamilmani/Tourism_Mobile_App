@@ -7,6 +7,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.LinearLayout
+import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
 
@@ -27,7 +28,12 @@ class SearchFragment : Fragment() {
         // Inflate the layout for this fragment
         binding = FragmentSearchBinding.inflate(inflater,container,false)
         binding.searchVM = ViewModelProvider(this).get(SearchViewModel::class.java).also { view ->
-
+            view.searchList.observe(viewLifecycleOwner, Observer { list ->
+                if (list.isNotEmpty()) {
+                    view.setPlaceAdapter(list)
+                    setRecyclerViewProperties()
+                }
+            })
         }
 
 

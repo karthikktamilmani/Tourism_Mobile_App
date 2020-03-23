@@ -22,4 +22,8 @@
     <string name="Year">Year</string>
     <string name="Month">Month</string>
     <string name="cvv">Cvv</string>
+    <string name="from">From</string>
+    <string name="payment">Payment</string>
+    <string name="places_to_visit">Places to Visit</string>
+    <string name="total">Total: %d</string>
 </resources>

@@ -29,7 +29,11 @@
         android:id="@+id/paymentFragment"
         android:name="com.team18.tourister.paymentFragment.PaymentFragment"
         android:label="fragment_payment"
-        tools:layout="@layout/fragment_payment" />
+        tools:layout="@layout/fragment_payment" >
+        <action
+            android:id="@+id/action_paymentFragment_to_successFragment"
+            app:destination="@id/successFragment" />
+    </fragment>
     <fragment
         android:id="@+id/loginFragment"
         android:name="com.team18.tourister.loginFragment.LoginFragment"
@@ -46,7 +50,11 @@
         android:id="@+id/otpFragment"
         android:name="com.team18.tourister.otpFragment.OtpFragment"
         android:label="fragment_otp"
-        tools:layout="@layout/fragment_otp" />
+        tools:layout="@layout/fragment_otp" >
+        <action
+            android:id="@+id/action_otpFragment_to_paymentFragment"
+            app:destination="@id/paymentFragment" />
+    </fragment>
     <fragment
         android:id="@+id/registerFragment"
         android:name="com.team18.tourister.registerFragment.RegisterFragment"
@@ -55,4 +63,9 @@
             android:id="@+id/action_registerFragment_to_otpFragment"
             app:destination="@id/otpFragment" />
     </fragment>
+    <fragment
+        android:id="@+id/successFragment"
+        android:name="com.team18.tourister.successFragment.SuccessFragment"
+        android:label="fragment_success"
+        tools:layout="@layout/fragment_success" />
 </navigation>

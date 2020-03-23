@@ -1,12 +1,12 @@
 package com.team18.tourister.API
 
-const val BASE_URL = "https://"
+const val BASE_URL = "http://100.24.21.95:8081/"
 
 const val SEARCH = "search"
 
 const val USER = "user"
 
-const val CARD = "bookticket/cardDetails"
+const val CARD = "bookticket/carddetails"
 
 const val TICKET = "bookticket"
 
@@ -19,3 +19,5 @@ const val SHAREDPREF_NAME = "touristerPref"
 const val TOKEN = "token"
 
 const val EMAIL_EXTRA = "email"
+
+const val TO_ADDRESS = "to_address"
