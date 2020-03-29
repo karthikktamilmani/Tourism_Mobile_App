@@ -11,6 +11,7 @@ import androidx.lifecycle.MutableLiveData
 import com.team18.tourister.API.EMAIL_EXTRA
 import com.team18.tourister.API.PlaceApi
 import com.team18.tourister.API.SHAREDPREF_NAME
+import com.team18.tourister.API.TOKEN
 import com.team18.tourister.ObservableViewModel
 import com.team18.tourister.R
 import com.team18.tourister.models.CardModel
@@ -30,16 +31,18 @@ class PaymentViewModel (application: Application): ObservableViewModel(applicati
     var expiry = MutableLiveData<String>()
     var price = MutableLiveData<String>()
     var to_name = ""
+    var isDone = false
     val ticketBooked = MutableLiveData<Boolean>()
     var from_list = listOf<String>()
     private var sharedPreferences: SharedPreferences
-
+    var token = ""
     init {
         calculatePrice(1)
         from_list = application.resources.getStringArray(R.array.list_from).toList()
         sharedPreferences = context.getSharedPreferences(SHAREDPREF_NAME, Context.MODE_PRIVATE)
-        email.value = sharedPreferences.getString(EMAIL_EXTRA,"test@test.com")
-//        card(email.value!!)
+        email.value = sharedPreferences.getString(EMAIL_EXTRA,"")
+        token = sharedPreferences.getString(TOKEN,"").toString()
+        card(email.value!!)
     }
 
     var fromField: Int = 0
@@ -112,7 +115,7 @@ class PaymentViewModel (application: Application): ObservableViewModel(applicati
     }
 
     private fun card(e: String) {
-        PlaceApi.retrofitService.getCard(e).enqueue(object : Callback<List<CardModel>> {
+        PlaceApi.retrofitService.getCard(encode(e)).enqueue(object : Callback<List<CardModel>> {
             override fun onFailure(call: Call<List<CardModel>>, t: Throwable) {
 
             }
@@ -121,8 +124,8 @@ class PaymentViewModel (application: Application): ObservableViewModel(applicati
                 val list = response.body()
 
                 if (list!!.isNotEmpty()) {
-                    cardNumber.value = list.get(0).Card
-                    expiry.value = list.get(0).Expiry
+                    cardNumber.value = list[0].Card
+                    expiry.value = list[0].Expiry
                 }
             }
         })
@@ -163,7 +166,7 @@ class PaymentViewModel (application: Application): ObservableViewModel(applicati
         jsonObject.put("payment_info",paymentObject)
 
 
-        PlaceApi.retrofitService.bookTicket("application/json",jsonObject)
+        PlaceApi.retrofitService.bookTicket(token,jsonObject)
             .enqueue(object : Callback<Any> {
                 override fun onFailure(call: Call<Any>, t: Throwable) {
                     Toast.makeText(context,"There was a network problem, please try again later", Toast.LENGTH_LONG).show()
@@ -172,6 +175,7 @@ class PaymentViewModel (application: Application): ObservableViewModel(applicati
 
                 override fun onResponse(call: Call<Any>, response: Response<Any>) {
                     val m = JSONObject(response.body().toString())
+                    isDone = true
                     ticketBooked.value = m.getString("message") == "ok"
                 }
             })

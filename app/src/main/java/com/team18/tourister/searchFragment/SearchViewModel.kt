@@ -61,15 +61,25 @@ class SearchViewModel (application: Application) : ObservableViewModel(applicati
                     ) {
                         val res = response.body()
                         val list = mutableListOf<SearchListModel>()
-                        for (i in res!!.Cities) {
-                            val model = SearchListModel(i.Place_name,i.Place_description,"C",i.Place_Image)
-                            list.add(model)
+                        if(res != null) {
+                            if (!res.Cities.isNullOrEmpty()) {
+                                for (i in res.Cities) {
+                                    val model = SearchListModel(i.Place_name,i.Place_description,"C",i.Place_Image)
+                                    list.add(model)
+                                }
+                            }
+
+                            if (!res.Spots.isNullOrEmpty()) {
+                                for (i in res.Spots) {
+                                    val model = SearchListModel(i.T_name,i.T_description,"S",i.T_Image)
+                                    list.add(model)
+                                }
+                            }
+                        }else {
+                            Toast.makeText(context, "Unable to get Data", Toast.LENGTH_LONG).show()
+
                         }
 
-                        for (i in res!!.Spots) {
-                            val model = SearchListModel(i.T_name,i.T_description,"S",i.T_Image)
-                            list.add(model)
-                        }
 
                         searchList.value = list
 

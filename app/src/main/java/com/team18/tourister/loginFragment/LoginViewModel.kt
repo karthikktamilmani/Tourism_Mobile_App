@@ -24,7 +24,7 @@ class LoginViewModel (application: Application): ObservableViewModel(application
     var token = ""
     lateinit var email: String
     private var sharedPreferences: SharedPreferences
-
+    var really = false
 
 
     var userNameField: String = ""
@@ -62,6 +62,10 @@ class LoginViewModel (application: Application): ObservableViewModel(application
 
     }
 
+    fun reset() {
+        really = false
+    }
+
 
     fun makeRequest(obj: HashMap<String, String>) {
         PlaceApi.retrofitService.login(obj.get("email")!!, obj.get("password")!!).enqueue(object : Callback<Any>{
@@ -72,6 +76,7 @@ class LoginViewModel (application: Application): ObservableViewModel(application
             override fun onResponse(call: Call<Any>, response: Response<Any>) {
 
                 val m = JSONObject(response.body().toString())
+                really = true
                 moveForward.value = m.getString("message") == "ok"
 
             }

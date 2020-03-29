@@ -33,6 +33,10 @@
         <action
             android:id="@+id/action_paymentFragment_to_successFragment"
             app:destination="@id/successFragment" />
+
+        <action
+            android:id="@+id/action_paymentFragment_to_detailFragment"
+            app:popUpTo="@id/detailFragmet" />
     </fragment>
     <fragment
         android:id="@+id/loginFragment"
@@ -45,6 +49,9 @@
         <action
             android:id="@+id/action_loginFragment_to_registerFragment"
             app:destination="@id/registerFragment" />
+        <action
+            android:id="@+id/action_loginFragment_to_detailFragment"
+            app:popUpTo="@id/detailFragmet" />
     </fragment>
     <fragment
         android:id="@+id/otpFragment"
@@ -54,6 +61,10 @@
         <action
             android:id="@+id/action_otpFragment_to_paymentFragment"
             app:destination="@id/paymentFragment" />
+
+        <action
+            android:id="@+id/action_otpFragment_to_loginFragment"
+            app:popUpTo="@id/loginFragment" />
     </fragment>
     <fragment
         android:id="@+id/registerFragment"
@@ -67,5 +78,10 @@
         android:id="@+id/successFragment"
         android:name="com.team18.tourister.successFragment.SuccessFragment"
         android:label="fragment_success"
-        tools:layout="@layout/fragment_success" />
+        tools:layout="@layout/fragment_success">
+        <action
+            android:id="@+id/action_successFragment_to_searchFragment"
+            app:destination="@id/searchFragment"
+            app:popUpTo="@id/searchFragment" />
+    </fragment>
 </navigation>

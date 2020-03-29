@@ -24,20 +24,20 @@ private val retrofit = Retrofit.Builder()
     .build()
 
 interface ApiService{
-    @GET("$SEARCH/{input}")
-    fun searchPlaces(@Path("input") input: String):
+    @GET(SEARCH)
+    fun searchPlaces(@Query("place") input: String):
             Call<SearchModel>
 
-    @GET("$SEARCH/{input}")
-    fun getDetails(@Path("input") input: String):
+    @GET(PLACE_DETAILS)
+    fun getDetails(@Query("place") input: String,@Query("type") type: String):
             Call<Place>
 
-    @GET("/{input}")
-    fun getSpotDetails(@Path("input") input: String):
+    @GET(PLACE_DETAILS)
+    fun getSpotDetails(@Query("place") input: String,@Query("type") type: String):
             Call<SpotDetails>
 
-    @GET(USER)
-    fun checkAuth(@Header("Token") auth: String):
+    @POST(USER)
+    fun checkAuth(@Header("Token") auth: String, @Body body: HashMap<String, String>):
             Call<Any>
 
     @GET("$USER/login")
@@ -54,11 +54,11 @@ interface ApiService{
             Call<AuthenticationModel>
 
     @POST(TICKET)
-    fun bookTicket(@Header("Content-Type") type: String,@Body body: HashMap<String,Any>):
+    fun bookTicket(@Header("Token") type: String,@Body body: HashMap<String,Any>):
             Call<Any>
 
-    @GET("$CARD/{input}")
-    fun getCard(@Path("input") input: String):
+    @GET(CARD)
+    fun getCard(@Query("email") input: String):
             Call<List<CardModel>>
 }
 

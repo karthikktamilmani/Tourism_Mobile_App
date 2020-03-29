@@ -39,11 +39,17 @@ class DetailFragment : Fragment() {
                     val placeName = encode(arguments?.getString(PLACE_NAME,""))
                     val type = encode(arguments?.getString(PLACE_TYPE,""))
                     if(arguments?.getString(PLACE_TYPE,"").equals("C")){
-                        view.setParam("$placeName/$type")
+                        view.setParam(placeName,type)
                     }else {
-                        view.setSpotParam("$placeName/$type")
+                        view.setSpotParam(placeName, type)
                     }
 
+                }
+            })
+
+            view.isListAvailable.observe(viewLifecycleOwner, Observer {
+                if(it) {
+                    binding.spotHeading.visibility = View.VISIBLE
                 }
             })
 
@@ -62,13 +68,23 @@ class DetailFragment : Fragment() {
 
             view.isLoggedIn.observe(viewLifecycleOwner, Observer {
                 if (it) {
-                    findNavController().navigate(R.id.action_detailFragmet_to_paymentFragment,bundleOf(TO_ADDRESS to arguments?.getString(PLACE_NAME,"")),null,null)
+                    if(view.reallyMoveForward) {
+                        findNavController().navigate(R.id.action_detailFragmet_to_paymentFragment,bundleOf(TO_ADDRESS to arguments?.getString(PLACE_NAME,"")),null,null)
+                    }
+                    view.reset()
+
                 }else {
-                    findNavController().navigate(R.id.action_detailFragmet_to_loginFragment,
-                        bundleOf(TO_ADDRESS to arguments?.getString(PLACE_NAME,"")),null,null)
+                    if(view.reallyMoveForward){
+                        findNavController().navigate(R.id.action_detailFragmet_to_loginFragment,
+                            bundleOf(TO_ADDRESS to arguments?.getString(PLACE_NAME,"")),null,null)
+                    }
+                    view.reset()
                 }
             })
         }
+
+        binding.spotHeading.visibility = View.GONE
+
 
         binding.lifecycleOwner = this
         // Inflate the layout for this fragment

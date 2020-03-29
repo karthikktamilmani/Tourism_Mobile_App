@@ -9,6 +9,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
+import androidx.activity.addCallback
 import androidx.core.os.bundleOf
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
@@ -39,16 +40,20 @@ class LoginFragment : Fragment() {
 
         binding.loginVm = ViewModelProvider(this).get(LoginViewModel::class.java).also { view ->
             view.moveForward.observe(viewLifecycleOwner, Observer {
-                if(it) {
+                if(it && view.really) {
                     findNavController().navigate(R.id.action_loginFragment_to_otpFragment, bundleOf(
                         EMAIL_EXTRA to view.email,
                         TO_ADDRESS to placeName), null, null)
+                    view.reset()
                 }else {
                     Toast.makeText(context,"Invalid Credentials", Toast.LENGTH_LONG).show()
                 }
             })
         }
 
+        requireActivity().onBackPressedDispatcher.addCallback(viewLifecycleOwner) {
+            findNavController().navigate(R.id.action_loginFragment_to_detailFragment)
+        }
         binding.lifecycleOwner = this
 
         binding.goToRegister.setOnClickListener { findNavController().navigate(R.id.action_loginFragment_to_registerFragment, bundleOf(

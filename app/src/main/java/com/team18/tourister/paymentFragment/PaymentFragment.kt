@@ -7,6 +7,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
+import androidx.activity.addCallback
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.fragment.findNavController
@@ -28,17 +29,20 @@ class PaymentFragment : Fragment() {
     ): View? {
 
         binding = FragmentPaymentBinding.inflate(inflater,container,false)
-//        val name = arguments?.getString(TO_ADDRESS,"Vadodara")
-            val name = "Vadodara"
+        val name = arguments?.getString(TO_ADDRESS,"Halifax").toString()
+
         binding.paymentVm = ViewModelProvider(this).get(PaymentViewModel::class.java).also { view ->
 
             view.price.observe(viewLifecycleOwner, Observer { price ->
                 binding.total.setText("Total:" + price + "$")
             })
 
+            view.email.observe(viewLifecycleOwner, Observer { email ->
+                emailInput.setText(email)
+            })
+
             view.cardNumber.observe(viewLifecycleOwner, Observer { number ->
                 cardInput.setText(number)
-                emailInput.setText(view.email.value)
             })
 
             view.expiry.observe(viewLifecycleOwner, Observer { expiry ->
@@ -59,6 +63,10 @@ class PaymentFragment : Fragment() {
                     findNavController().navigate(R.id.action_paymentFragment_to_successFragment)
                 }
             })
+
+            requireActivity().onBackPressedDispatcher.addCallback(viewLifecycleOwner) {
+                findNavController().navigate(R.id.action_paymentFragment_to_detailFragment)
+            }
         }
 
         binding.lifecycleOwner = this

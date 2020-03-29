@@ -4,7 +4,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    android:background="@color/successColor"
+    android:background="@color/mainColor"
     tools:context=".successFragment.SuccessFragment">
 
 
@@ -24,9 +24,9 @@
     <TextView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="The Tickets have been sent to the Email Address"
+        android:text="Congratulations!! \n\n The Tickets have been sent to the Email Address"
         android:textStyle="bold"
-        android:textColor="@android:color/white"
+        android:textColor="@android:color/black"
         android:textSize="20sp"
         android:textAlignment="center"
         android:layout_margin="20dp"

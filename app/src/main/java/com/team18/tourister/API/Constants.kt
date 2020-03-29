@@ -1,8 +1,10 @@
 package com.team18.tourister.API
 
-const val BASE_URL = "http://100.24.21.95:8081/"
+const val BASE_URL = "http://project-alb-1382584841.us-east-1.elb.amazonaws.com/"
 
-const val SEARCH = "search"
+const val SEARCH = "search/place"
+
+const val PLACE_DETAILS = "search/place/type"
 
 const val USER = "user"
 

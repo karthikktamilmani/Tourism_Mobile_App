@@ -49,7 +49,7 @@ class RegisterViewModel (application: Application) : ObservableViewModel(applica
             params["name"] = encode(userNameField)
             params["email"] = encode(emailField)
             params["password"] = encode(passwordField)
-            email = userNameField
+            email = emailField
             makeRequest(params)
         } else {
             Toast.makeText(context, "Fields cannot be empty", Toast.LENGTH_LONG).show()

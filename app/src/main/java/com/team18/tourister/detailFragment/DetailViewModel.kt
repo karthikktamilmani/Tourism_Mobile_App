@@ -3,9 +3,11 @@ package com.team18.tourister.detailFragment
 import android.app.Application
 import android.content.Context
 import android.content.SharedPreferences
+import android.util.Base64
 import android.widget.Toast
 import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.MutableLiveData
+import com.team18.tourister.API.EMAIL_EXTRA
 import com.team18.tourister.API.PlaceApi
 import com.team18.tourister.API.SHAREDPREF_NAME
 import com.team18.tourister.API.TOKEN
@@ -28,16 +30,22 @@ class DetailViewModel (application: Application) : AndroidViewModel(application)
     val placeDesc = MutableLiveData<String>()
     val image_url = MutableLiveData<String>()
     val spot_list = MutableLiveData<List<SpotPlace>>()
-
+    val params = HashMap<String, String>()
+    var isListAvailable = MutableLiveData<Boolean>()
+    lateinit var email: String
     private var adapter: SpotAdapter
-    lateinit var input: String
+    lateinit var place: String
+    lateinit var type: String
     private var sharedPreferences: SharedPreferences
+    var reallyMoveForward = false
 
 
     init {
         adapter = SpotAdapter(context)
+        isListAvailable.value = false
         sharedPreferences = context.getSharedPreferences(SHAREDPREF_NAME, Context.MODE_PRIVATE)
-
+        email = sharedPreferences.getString(EMAIL_EXTRA,"").toString()
+        params["email"] = encode(email)
         isLoaded.value = true
     }
 
@@ -48,18 +56,23 @@ class DetailViewModel (application: Application) : AndroidViewModel(application)
         adapter.notifyDataSetChanged()
     }
 
-    fun setParam(params: String) {
-        input = params
+    fun setParam(place: String,type: String) {
+        this.place = place
+        this.type = type
         getDetails()
     }
 
-    fun setSpotParam(params: String) {
-        input = params
+    fun setSpotParam(place: String,type: String) {
+        this.place = place
+        this.type = type
         getSpotDetails()
     }
 
+    fun reset() {
+        reallyMoveForward = false
+    }
     private fun getDetails() {
-        PlaceApi.retrofitService.getDetails(input)
+        PlaceApi.retrofitService.getDetails(place,type)
             .enqueue(object : Callback<Place> {
                 override fun onFailure(call: Call<Place>, t: Throwable) {
                     Toast.makeText(context, "Server Error", Toast.LENGTH_LONG).show()
@@ -71,12 +84,15 @@ class DetailViewModel (application: Application) : AndroidViewModel(application)
                     placeDesc.value = res?.Place_description
                     image_url.value = res?.Place_Image
                     spot_list.value = res?.Spots
+                    if(!spot_list.value.isNullOrEmpty()){
+                        isListAvailable.value = true
+                    }
                 }
             })
     }
 
     private fun getSpotDetails() {
-        PlaceApi.retrofitService.getSpotDetails(input)
+        PlaceApi.retrofitService.getSpotDetails(place,type)
             .enqueue(object : Callback<SpotDetails> {
                 override fun onFailure(call: Call<SpotDetails>, t: Throwable) {
                     Toast.makeText(context, "Server Error", Toast.LENGTH_LONG).show()
@@ -93,7 +109,7 @@ class DetailViewModel (application: Application) : AndroidViewModel(application)
     }
 
     fun checkAuth() {
-        PlaceApi.retrofitService.checkAuth(sharedPreferences.getString(TOKEN, "") + "")
+        PlaceApi.retrofitService.checkAuth(sharedPreferences.getString(TOKEN, "") + "",params)
             .enqueue(object : Callback<Any>{
                 override fun onFailure(call: Call<Any>, t: Throwable) {
                     isLoggedIn.value = false
@@ -102,10 +118,16 @@ class DetailViewModel (application: Application) : AndroidViewModel(application)
                 override fun onResponse(call: Call<Any>, response: Response<Any>) {
 
                     val m = JSONObject(response.body().toString())
+                    reallyMoveForward = true
                     isLoggedIn.value = m.getString("message") == "ok"
 
                 }
             })
 
     }
+    fun encode(st: String?) : String {
+        return Base64.encodeToString(st?.toByteArray(), Base64.NO_WRAP)
+    }
+
+
 }

@@ -7,6 +7,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
+import androidx.activity.addCallback
 import androidx.core.os.bundleOf
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModel
@@ -37,11 +38,15 @@ class OtpFragment : Fragment() {
             view.moveForward.observe(viewLifecycleOwner, Observer {
                 if(it) {
                     findNavController().navigate(R.id.action_otpFragment_to_paymentFragment,
-                        bundleOf(TO_ADDRESS to arguments?.getString(TO_ADDRESS, "Point pleasant park")), null,null)
+                        bundleOf(TO_ADDRESS to arguments?.getString(TO_ADDRESS, "Halifax")), null,null)
                 }else {
                     Toast.makeText(context,"Invalid OTP",Toast.LENGTH_LONG).show()
                 }
             })
+        }
+
+        requireActivity().onBackPressedDispatcher.addCallback(viewLifecycleOwner) {
+            findNavController().navigate(R.id.action_otpFragment_to_loginFragment)
         }
 
         binding.lifecycleOwner = this
